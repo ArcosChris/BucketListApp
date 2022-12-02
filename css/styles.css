@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+body{
+    font-family: 'Poppins', sans-serif!important;
+}
+
+.logo{
+    color: #387780;
+    font-size: 35px;
+}
+
+.navbar:hover a {
+    animation: fly 5s;
+}
+
+.ideas{
+    width: 100%;
+}
+
+.header-text h1{
+    color:#387780;
+    font-weight:400;
+}
+
+.card-img-top {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.bucketList-img{
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.bucketList-title{
+    color: black;
+    text-transform: uppercase;
+    font-weight: 300;
+}
+
+.offcanvas-title{
+    color:#E83151;
+}
+
+.idea-modal{
+    color: #E83151;
+}
+
+.title-button{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.fancy, .addToList{
+    --bs-btn-color: #387780!important;
+    --bs-btn-border-color: #757780;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #387780!important;
+    --bs-btn-hover-border-color: #757780;
+    --bs-btn-focus-shadow-rgb: 108,117,125;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #757780;
+    --bs-btn-active-border-color: #757780;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #757780;
+    --bs-btn-disabled-bg: transparent;
+    --bs-btn-disabled-border-color: #757780;
+    --bs-gradient: none;
+      border: var(--bs-btn-border-width) solid #757780!important; 
+}
+
+.idea-message{
+    color:red;
+    padding-top: 5px;
+    display: block;
+    text-align: center;
+}
+
+.addToList{
+    --bs-btn-font-size: 1rem!important;
+}
+
+@keyframes fly{
+    0%{
+        rotate: 90deg;
+    }
+    30% {
+        rotate: 90deg;
+        translate: 800px;
+    }
+    80%{
+        rotate: -90deg;
+    }
+    100%{
+        rotate: 0;
+    }
+}
