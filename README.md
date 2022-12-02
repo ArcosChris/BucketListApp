@@ -1,7 +1,5 @@
 # Bucket List App
-## This project was created using a HTML, CSS, Bootstrap and JavaScript.
-
-The purpose of this project was to be a refresh using the tools described above.
+This project was created using a HTML, CSS, Bootstrap and JavaScript. The purpose of this project was to be a refresher using the tools described above.
 
 - [Check it out here!](https://arcoschris.github.io/BucketListApp/)
 
