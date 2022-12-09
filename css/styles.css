@@ -44,7 +44,7 @@ body{
     color:#E83151;
 }
 
-.idea-modal{
+.idea-modal, .confirm-delete-modal{
     color: #E83151;
 }
 
@@ -79,7 +79,12 @@ body{
     text-align: center;
 }
 
-.addToList{
+.imgErr{
+    color: red;
+    margin: 0 auto;
+}
+
+.btn{
     --bs-btn-font-size: 1rem!important;
 }
 

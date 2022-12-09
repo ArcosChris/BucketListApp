@@ -10,22 +10,11 @@
     <link rel="icon" type="image/x-icon" href="resources/space-awesome.ico">
     <!-- css -->
     <link rel="stylesheet" href="css/styles.css">
-
     <!-- BS CSS v5.2.1 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-
     <!--Fontawesome-->
     <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css">
-    <script src="https://kit.fontawesome.com/d3bda8e242.js" crossorigin="anonymous"></script>
-
-    <!-- BS JS -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
-        </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
-        integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
-        </script>
 </head>
 
 <body>
@@ -35,7 +24,7 @@
             <div class="container">
                 <a class="navbar-brand" href="#"><i class="logo fa-brands fa-space-awesome"></i></a>
                 <button type="button" class="btn btn-outline fancy" data-bs-toggle="modal"
-                    data-bs-target="#exampleModal">
+                    data-bs-target="#addUpdateModal" data-form-type="addItem">
                     Add Idea
                 </button>
             </div>
@@ -57,39 +46,39 @@
             </div>
         </div>
 
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <!-- ADD AND UPDATE ITEM Modal -->
+        <div class="modal fade" id="addUpdateModal" tabindex="-1" aria-labelledby="addUpdateModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="idea-modal modal-title fs-5" id="exampleModalLabel">Add a New Idea</h1>
+                        <h1 class="idea-modal modal-title fs-5" id="addUpdateModalLabel">Add a New Idea</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="#" id="addNewIdeaForm">
+                        <form action="#" id="addUpdateForm">
                             <div class="mb-3">
                                 <label for="image-url" class="form-label">Image Url</label>
                                 <input type="text" class="form-control" id="image-url" aria-describedby="image url"
                                     required>
-                                <small class="idea-message">Image Url is required</small>
+                                <div class="text-center">
+                                    <small class="imgErr d-none">Image is not valid. Please submit a different
+                                        image.</small>
+                                </div>
                             </div>
                             <div class="mb-3">
                                 <label for="idea-title" class="form-label">Title</label>
-                                <input type="text" class="form-control" id="idea-title">
-                                <small class="idea-message">Title is required</small>
+                                <input type="text" class="form-control" id="idea-title" maxlength="25">
                             </div>
                             <div class="mb-3">
                                 <label for="idea-desc" class="form-label">Description</label>
-                                <textarea type="text" class="form-control" id="idea-desc"></textarea>
-                                <small class="idea-message">Idea Description is required</small>
+                                <textarea type="text" class="form-control" id="idea-desc" maxlength="160"></textarea>
                             </div>
                             <hr />
                             <div class="d-grid col-12 mx-auto">
-                                <button value="Submit" onClick="validateAndSubmitForm()" class="btn btn-outline fancy"
-                                    type="button">Submit</button>
+                                <button value="submit" class="btn btn-outline fancy" type="submit">Submit</button>
                             </div>
                         </form>
-
                     </div>
                 </div>
             </div>
@@ -98,8 +87,27 @@
 
     <main>
         <section class="off-canvas-section">
+            <!-- DELETE CONFIRM Modal -->
+            <div class="modal fade" id="deleteConfirm" data-card-called="" tabindex="-1"
+                aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body text-center">
+                            <h1 class="confirm-delete-modal modal-title fs-5" id="deleteConfirmModalLabel">Are you sure
+                                you want to remove this item from your bucket list?</h1>
+                            <div class="mt-3">
+                                <button class="btn btn-outline-secondary mx-1" type="button"
+                                    data-bs-dismiss="modal">Cancel</button>
+                                <button class="btn btn-outline-danger mx-1 remove-bucketList-item"
+                                    data-bs-dismiss="modal" type="button">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- off canvas  -->
-            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample"
+            <div class=" offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample"
                 aria-labelledby="offcanvasExampleLabel">
                 <div class="offcanvas-header">
                     <h4 class="offcanvas-title" id="offcanvasExampleLabel">Your BucketList</h4>
@@ -115,21 +123,16 @@
                     </div>
                 </div>
             </div>
-            </div>
         </section>
         <section class="ideas container py-5">
-            <div id="idea-container" class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 g-3">
+            <div id="idea-container" class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-3">
             </div>
         </section>
     </main>
 
-    <!-- <footer class="text-muted py-5 text-center">
-        <h4>Thanks for visiting BucketList</h4>
-    </footer> -->
-
     <template id="idea-temp">
-        <div class="col">
-            <div class="card shadow-sm col">
+        <div id="template1" class="bucketList-idea-card" data-idea-item="">
+            <div class="card shadow-sm col h-100">
                 <img class="idea-img card-img-top" width="100%"
                     src="https://images.unsplash.com/photo-1568751302450-3d84e00f2348?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8YnVja2V0JTIwbGlzdHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
                     alt="hot air balloons">
@@ -148,22 +151,64 @@
         </div>
     </template>
 
-    <template id="bucket-list-item">
-        <div class="bucket-list-card card text-bg-dark mb-3">
+    <template id="bucket-list-item" data-bucket-list-item="">
+        <div id="template2" class="bucket-list-card card text-bg-dark mb-3">
             <img src="https://images.unsplash.com/photo-1568751302450-3d84e00f2348?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8YnVja2V0JTIwbGlzdHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
                 class="bucketList-img card-img" width="100%" alt="...">
             <div class="card-img-overlay">
                 <div class="title-button">
                     <h5 class="bucketList-title card-title">Hot Air Balloon Ride</h5>
-                    <button type="button" class="btn-close remove-bucketList-item" aria-label="Close"></button>
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#deleteConfirm" class="btn-close"
+                        aria-label="Close"></button>
                 </div>
             </div>
         </div>
     </template>
 
+    <template id="user-idea-temp">
+        <div id="template3" class="bucketList-idea-card" data-idea-item="">
+            <div class="card shadow-sm col h-100">
+                <img class="idea-img card-img-top" width="100%"
+                    src="https://images.unsplash.com/photo-1568751302450-3d84e00f2348?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8YnVja2V0JTIwbGlzdHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
+                    alt="hot air balloons">
+                <div class="card-body d-flex flex-column">
+                    <h4 class="card-title text-center">Hot Air Balloon Ride</h4>
+                    <p class="idea-desc card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                        eiusmod tempor incididunt ut labore et dolore magna aliqua. Et sollicitudin ac orci
+                        phasellus.</p>
+                    <div class="text-center d-grid col-12 mx-auto mt-auto">
+                        <div class="btn-group" role="group" aria-label="user created idea drop down">
+                            <button type="button" class="addToList btn btn-sm btn-outline-secondary mb-1">Add to Bucket
+                                List</button>
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-sm btn-outline fancy mb-1 dropdown-toggle"
+                                    data-bs-toggle="dropdown" aria-expanded="false"></button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="updateIdea dropdown-item">Update</a></li>
+                                    <li><a class="deleteIdea dropdown-item">Delete</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+
+    <!-- BS JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
+        </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+        integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
+        </script>
+    <!-- Fontawesome -->
+    <script src="https://kit.fontawesome.com/d3bda8e242.js" crossorigin="anonymous"></script>
     <!-- JS -->
     <script src="js/bucketList.js"></script>
-    <script src="js/form.js"></script>
+    <script src="js/dummyData.js"></script>
+
 </body>
 
 </html>
