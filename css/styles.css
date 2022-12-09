@@ -88,6 +88,10 @@ body{
     --bs-btn-font-size: 1rem!important;
 }
 
+.remove-msg{
+    color: #387780;
+}
+
 @keyframes fly{
     0%{
         rotate: 90deg;

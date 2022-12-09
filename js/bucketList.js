@@ -13,6 +13,7 @@ addUpdateForm.addEventListener('submit', validateAndSubmitForm);
 deleteModal.addEventListener('show.bs.modal', setDeleteModalDataAttr);
 addUpdateModal.addEventListener('show.bs.modal', checkFormType);
 
+
 const dummyData =
     [
         {
@@ -78,14 +79,46 @@ addStorageItemsOnLoad();
 
 
 // ------------------- MODAL FUNCTIONALITY ---------------------//
-function checkFormType(event) {
-    // let typeOfForm = event.relatedTarget.dataset.formType;
-    // if (typeOfForm === 'addItem') {
-    //     setAddModal();
-    // }
-    // else if (typeOfForm === 'updateItem') {
-    //     setUpdateModal();
-    // }
+function checkFormType(e) {
+    if (!e.relatedTarget) {
+        //dropdown adds another event need to return it to not affect the modal values
+        return;
+    }
+    resetFormOnOpen();
+    let typeOfForm = e.relatedTarget.dataset.formType;
+    addUpdateForm.dataset.formType = typeOfForm;
+    addUpdateForm.dataset.
+
+        if(typeOfForm === 'updateItem') {
+        let itemToUpdate = e.relatedTarget.closest('.mainItem');
+        addUpdateModal.dataset.cardCalled = itemToUpdate.id;
+        updateItemModal(itemToUpdate);
+    }
+    else {
+        addItemModal();
+    }
+}
+
+function addItemModal() {
+    let modalHeader = document.getElementById('addUpdateModalLabel');
+    let formButton = document.getElementById('addUpdateButton');
+    modalHeader.innerHTML = 'Add a New Idea'
+    formButton.innerHTML = 'Add'
+}
+
+function updateItemModal(item) {
+    let modalHeader = document.getElementById('addUpdateModalLabel');
+    let formButton = document.getElementById('addUpdateButton');
+
+    let imageUrlInput = document.getElementById('image-url');
+    let titleInput = document.getElementById('idea-title');
+    let descriptionInput = document.getElementById('idea-desc');
+
+    modalHeader.innerHTML = 'Update Item'
+    formButton.innerHTML = 'Update'
+    imageUrlInput.value = item.querySelector('.idea-img').src;
+    titleInput.value = item.querySelector('.card-title').innerHTML;
+    descriptionInput.value = item.querySelector('.idea-desc').innerHTML;
 }
 
 function setDeleteModalDataAttr(e) {
@@ -96,17 +129,18 @@ function setDeleteModalDataAttr(e) {
     let deleteConfirmModal = deleteModal;
     let cardThatTriggered = e.relatedTarget.closest('.mainItem').id;
     let typeOfCard = cardThatTriggered.includes('bucketList') ? 'bucket-list-container' : 'idea-container';
+    let innerContent = typeOfCard === 'bucket-list-container' ?
+        "Are you sure you want to remove this item from your bucket list?" :
+        "Are you sure you want to remove this item? <span><h6 class='text-muted'>Removing this idea will no longer make it visible to others.</h6><span>";
     deleteConfirmModal.dataset.cardCalled = cardThatTriggered;
     deleteConfirmModal.dataset.itemType = typeOfCard;
 
-    //change text of MODAL HERE>>>
+    document.querySelector(".confirm-delete-modal").innerHTML = innerContent;
 }
 
-
-// ------------------- USER IDEAS/IDEAS ---------------------//
 function validateAndSubmitForm(e) {
     e.preventDefault();
-
+    console.log(e);
     let newBucketListItem = {
         imgSrc: document.getElementById('image-url').value,
         ideaTitle: document.getElementById('idea-title').value,
@@ -116,6 +150,7 @@ function validateAndSubmitForm(e) {
     isValidImage(newBucketListItem);
 }
 
+// ------------------- USER IDEAS/IDEAS ---------------------//
 function addIdeasToContainer(idea) {
     let container = document.getElementById('idea-container');
     //only items coming from localstorage will already have an itemid
@@ -147,6 +182,9 @@ function addIdeasToContainer(idea) {
 
     item.querySelector('.addToList').addEventListener('click', gatherAddCardData);
     container.prepend(item);
+    if (isUserSubmitted) {
+        document.querySelector("[data-bs-dismiss='modal']").click();
+    }
     isUserSubmitted = false;
 }
 
@@ -248,7 +286,7 @@ function showErrorMessage() {
     }
 }
 
-function isValidImage(bucketListItem) {
+function isValidImage(bucketListItem, typeOfRequest) {
     //since fetch wont reject on HTTP error status (404,500, etc.)
     //promise will resolve normally (with ok (property))
     fetch(bucketListItem.imgSrc, { method: 'HEAD' })
@@ -269,6 +307,13 @@ function randomId() {
 
     itemId += randomLetter += performance.now();
     return itemId.replace('.', '');
+}
+
+function resetFormOnOpen() {
+    addUpdateForm.reset();
+    if (!IMG_ERR_MSG.contains('d-none')) {
+        IMG_ERR_MSG.add('d-none');
+    }
 }
 
 

@@ -48,7 +48,7 @@
 
         <!-- ADD AND UPDATE ITEM Modal -->
         <div class="modal fade" id="addUpdateModal" tabindex="-1" aria-labelledby="addUpdateModalLabel"
-            aria-hidden="true">
+            aria-hidden="true" data-item-type data-card-called>
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -56,7 +56,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="addUpdateForm">
+                        <form id="addUpdateForm" data-form-type data->
                             <div class="mb-3">
                                 <label for="image-url" class="form-label">Image Url</label>
                                 <input type="text" class="form-control" id="image-url" aria-describedby="image url"
@@ -76,7 +76,7 @@
                             </div>
                             <hr />
                             <div class="d-grid col-12 mx-auto">
-                                <button type="submit" class="btn btn-outline fancy">Submit</button>
+                                <button id="addUpdateButton" type="submit" class="btn btn-outline fancy">Submit</button>
                             </div>
                         </form>
                     </div>
@@ -185,7 +185,9 @@
                                 <button type="button" class="btn btn-sm btn-outline fancy mb-1 dropdown-toggle"
                                     data-bs-toggle="dropdown" aria-expanded="false"></button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="updateIdea dropdown-item">Update</a></li>
+                                    <li><button class="updateIdea dropdown-item" data-bs-toggle="modal"
+                                            data-bs-target="#addUpdateModal" data-form-type="updateItem">Update</button>
+                                    </li>
                                     <li><button class="deleteIdea dropdown-item" data-bs-toggle="modal"
                                             data-bs-target="#deleteConfirm">Delete</button></li>
                                 </ul>
