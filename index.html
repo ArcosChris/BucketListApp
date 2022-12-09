@@ -56,7 +56,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="#" id="addUpdateForm">
+                        <form id="addUpdateForm">
                             <div class="mb-3">
                                 <label for="image-url" class="form-label">Image Url</label>
                                 <input type="text" class="form-control" id="image-url" aria-describedby="image url"
@@ -76,7 +76,7 @@
                             </div>
                             <hr />
                             <div class="d-grid col-12 mx-auto">
-                                <button value="submit" class="btn btn-outline fancy" type="submit">Submit</button>
+                                <button type="submit" class="btn btn-outline fancy">Submit</button>
                             </div>
                         </form>
                     </div>
@@ -88,7 +88,7 @@
     <main>
         <section class="off-canvas-section">
             <!-- DELETE CONFIRM Modal -->
-            <div class="modal fade" id="deleteConfirm" data-card-called="" tabindex="-1"
+            <div class="modal fade" id="deleteConfirm" data-item-type data-card-called tabindex="-1"
                 aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -98,8 +98,8 @@
                             <div class="mt-3">
                                 <button class="btn btn-outline-secondary mx-1" type="button"
                                     data-bs-dismiss="modal">Cancel</button>
-                                <button class="btn btn-outline-danger mx-1 remove-bucketList-item"
-                                    data-bs-dismiss="modal" type="button">Delete</button>
+                                <button class="btn btn-outline-danger mx-1 remove-item" data-bs-dismiss="modal"
+                                    type="button">Delete</button>
                             </div>
                         </div>
                     </div>
@@ -124,8 +124,9 @@
                 </div>
             </div>
         </section>
-        <section class="ideas container py-5">
-            <div id="idea-container" class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-3">
+
+        <section class="ideas container-fluid p-5">
+            <div id="idea-container" class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-3">
             </div>
         </section>
     </main>
@@ -136,12 +137,12 @@
                 <img class="idea-img card-img-top" width="100%"
                     src="https://images.unsplash.com/photo-1568751302450-3d84e00f2348?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8YnVja2V0JTIwbGlzdHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
                     alt="hot air balloons">
-                <div class="card-body">
+                <div class="card-body d-flex flex-column">
                     <h4 class="card-title text-center">Hot Air Balloon Ride</h4>
                     <p class="idea-desc card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
                         eiusmod tempor incididunt ut labore et dolore magna aliqua. Et sollicitudin ac orci
                         phasellus.</p>
-                    <div class="text-center d-grid col-12 mx-auto">
+                    <div class="text-center d-grid col-12 mx-auto mt-auto">
                         <button type="button" class="addToList btn btn-sm btn-outline-secondary">Add to
                             Bucket
                             List</button>
@@ -151,8 +152,8 @@
         </div>
     </template>
 
-    <template id="bucket-list-item" data-bucket-list-item="">
-        <div id="template2" class="bucket-list-card card text-bg-dark mb-3">
+    <template id="bucket-list-item">
+        <div id="template2" class="bucket-list-card card text-bg-dark mb-3 mainItem" data-bucket-list-item="">
             <img src="https://images.unsplash.com/photo-1568751302450-3d84e00f2348?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8YnVja2V0JTIwbGlzdHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
                 class="bucketList-img card-img" width="100%" alt="...">
             <div class="card-img-overlay">
@@ -166,7 +167,7 @@
     </template>
 
     <template id="user-idea-temp">
-        <div id="template3" class="bucketList-idea-card" data-idea-item="">
+        <div id="template3" class="bucketList-idea-card mainItem" data-idea-item="">
             <div class="card shadow-sm col h-100">
                 <img class="idea-img card-img-top" width="100%"
                     src="https://images.unsplash.com/photo-1568751302450-3d84e00f2348?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8YnVja2V0JTIwbGlzdHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
@@ -185,7 +186,8 @@
                                     data-bs-toggle="dropdown" aria-expanded="false"></button>
                                 <ul class="dropdown-menu">
                                     <li><a class="updateIdea dropdown-item">Update</a></li>
-                                    <li><a class="deleteIdea dropdown-item">Delete</a></li>
+                                    <li><button class="deleteIdea dropdown-item" data-bs-toggle="modal"
+                                            data-bs-target="#deleteConfirm">Delete</button></li>
                                 </ul>
                             </div>
                         </div>
@@ -207,8 +209,6 @@
     <script src="https://kit.fontawesome.com/d3bda8e242.js" crossorigin="anonymous"></script>
     <!-- JS -->
     <script src="js/bucketList.js"></script>
-    <script src="js/dummyData.js"></script>
-
 </body>
 
 </html>
