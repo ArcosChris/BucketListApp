@@ -4,6 +4,7 @@ const IMG_ERR_MSG = document.querySelector('.imgErr').classList;
 const deleteModal = document.getElementById('deleteConfirm');
 const addUpdateModal = document.getElementById('addUpdateModal');
 let addUpdateForm = document.getElementById('addUpdateForm');
+let ideaContainer = document.getElementById('idea-container');
 let isUserSubmitted = false;
 
 
@@ -12,7 +13,6 @@ addListener('addToList', 'click', gatherAddCardData);
 addUpdateForm.addEventListener('submit', validateAndSubmitForm);
 deleteModal.addEventListener('show.bs.modal', setDeleteModalDataAttr);
 addUpdateModal.addEventListener('show.bs.modal', checkFormType);
-
 
 const dummyData =
     [
@@ -79,19 +79,22 @@ addStorageItemsOnLoad();
 
 
 // ------------------- MODAL FUNCTIONALITY ---------------------//
+//checkFormType, addItemModal, updateItemModal, change modal content
+//based on type of button that clicked
 function checkFormType(e) {
     if (!e.relatedTarget) {
         //dropdown adds another event need to return it to not affect the modal values
         return;
     }
     resetFormOnOpen();
+    //the add item button and the update button have a data type 
+    //when they click to open the modal we grab that info and set it 
     let typeOfForm = e.relatedTarget.dataset.formType;
     addUpdateForm.dataset.formType = typeOfForm;
-    addUpdateForm.dataset.
 
-        if(typeOfForm === 'updateItem') {
+    if (typeOfForm === 'updateItem') {
         let itemToUpdate = e.relatedTarget.closest('.mainItem');
-        addUpdateModal.dataset.cardCalled = itemToUpdate.id;
+        addUpdateForm.dataset.cardCalled = itemToUpdate.id;
         updateItemModal(itemToUpdate);
     }
     else {
@@ -102,8 +105,8 @@ function checkFormType(e) {
 function addItemModal() {
     let modalHeader = document.getElementById('addUpdateModalLabel');
     let formButton = document.getElementById('addUpdateButton');
-    modalHeader.innerHTML = 'Add a New Idea'
-    formButton.innerHTML = 'Add'
+    modalHeader.innerHTML = 'Add a New Idea';
+    formButton.innerHTML = 'Add';
 }
 
 function updateItemModal(item) {
@@ -140,17 +143,34 @@ function setDeleteModalDataAttr(e) {
 
 function validateAndSubmitForm(e) {
     e.preventDefault();
-    console.log(e);
-    let newBucketListItem = {
+
+    let typeOfRequest = addUpdateForm.dataset.formType;
+
+    let itemInformation = {
         imgSrc: document.getElementById('image-url').value,
         ideaTitle: document.getElementById('idea-title').value,
         ideaDesc: document.getElementById('idea-desc').value,
         imgDesc: document.getElementById('idea-title').value
     }
-    isValidImage(newBucketListItem);
+    isValidImage(itemInformation, typeOfRequest);
 }
 
 // ------------------- USER IDEAS/IDEAS ---------------------//
+function updateExistingItem(updateInformation) {
+    let id = addUpdateForm.dataset.cardCalled;
+    let item = ideaContainer.querySelector(`#${id}`);
+
+    item.querySelector('.card-title').innerHTML = updateInformation.ideaTitle;
+    item.querySelector('.idea-img').src = updateInformation.imgSrc;
+    item.querySelector('.idea-img').alt = updateInformation.imgDesc;
+    item.querySelector('.idea-desc').innerHTML = updateInformation.ideaDesc;
+    updateInformation.itemId = id;
+
+    document.querySelector("[data-bs-dismiss='modal']").click();
+    updateBucketListItem(updateInformation);
+    updateLocalStorageItem(USER_IDEAS_LIST, updateInformation);
+}
+
 function addIdeasToContainer(idea) {
     let container = document.getElementById('idea-container');
     //only items coming from localstorage will already have an itemid
@@ -237,6 +257,27 @@ function mapAndAppendToBucketList(bucketListItem) {
     bucketListContainer.append(templateClone);
 }
 
+function updateBucketListItem(newData) {
+    let item = document.getElementById('bucket-list-container').querySelector(`#bucketList-${newData.itemId}`);
+    console.log(item)
+    if (item) {
+        item.querySelector('.bucketList-title').innerHTML = newData.ideaTitle;
+        item.querySelector('.bucketList-img').src = newData.imgSrc;
+        item.querySelector('.bucketList-img').alt = newData.ideaTitle;
+
+
+        let updatedBucketListItem = {
+            itemId: `bucketList-${newData.itemId}`,
+            itemDataAtt: newData.itemId,
+            itemImg: newData.imgSrc,
+            itemImgDesc: newData.imgDesc,
+            itemTitle: newData.ideaTitle
+        };
+
+        updateLocalStorageItem(USER_BUCKET_LIST, updatedBucketListItem);
+    }
+}
+
 // ------------------- LOCAL STORAGE---------------------//
 
 function addStorageItemsOnLoad() {
@@ -250,6 +291,13 @@ function addStorageItemsOnLoad() {
     if (userIdeaItems.length > 0) {
         userIdeaItems.forEach(item => addIdeasToContainer(item));
     }
+}
+
+function updateLocalStorageItem(storageKey, updateInfo) {
+    let items = localStorageData(storageKey);
+    let previousItemIndex = items.findIndex(item => item.itemId === updateInfo.itemId);
+    items.splice(previousItemIndex, 1, updateInfo);
+    localStorage.setItem(storageKey, JSON.stringify(items));
 }
 
 function addToLocalStorage(storageKey, item) {
@@ -286,14 +334,21 @@ function showErrorMessage() {
     }
 }
 
-function isValidImage(bucketListItem, typeOfRequest) {
+function isValidImage(itemInformation, typeOfRequest) {
     //since fetch wont reject on HTTP error status (404,500, etc.)
     //promise will resolve normally (with ok (property))
-    fetch(bucketListItem.imgSrc, { method: 'HEAD' })
+    fetch(itemInformation.imgSrc, { method: 'HEAD' })
         .then(response => {
             if (response.ok) {
-                isUserSubmitted = true;
-                addIdeasToContainer(bucketListItem);
+
+                if (typeOfRequest === 'updateItem') {
+                    updateExistingItem(itemInformation);
+                }
+                else {
+                    isUserSubmitted = true;
+                    addIdeasToContainer(itemInformation);
+                }
+
             } else {
                 showErrorMessage();
             }
