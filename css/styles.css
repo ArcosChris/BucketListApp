@@ -44,7 +44,9 @@ body{
     color:#E83151;
 }
 
-.idea-modal, .confirm-delete-modal{
+.idea-modal, 
+.confirm-delete-modal,
+.messageItemTitle{
     color: #E83151;
 }
 

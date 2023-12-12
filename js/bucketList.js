@@ -213,22 +213,22 @@ function gatherAddCardData(event) {
     let buttonClicked = event.target;
     let cardSelected = buttonClicked.closest('.bucketList-idea-card');
     let allExistingInBucketList = Array.from(document.querySelectorAll('.bucket-list-card'));
+    let item = {
+        itemImg: cardSelected.getElementsByClassName('idea-img')[0].src,
+        itemImgDesc: cardSelected.getElementsByClassName('idea-img')[0].alt,
+        itemTitle: cardSelected.getElementsByClassName('card-title')[0].innerHTML,
+        itemId: `bucketList-${cardSelected.dataset.ideaItem}`,
+        itemDataAtt: cardSelected.dataset.ideaItem
+    };
 
     //check if user already has item in their bucket list (grab all the items with the class bucket-list-card)
     if (!allExistingInBucketList.find(item => item.dataset.bucketListItem === cardSelected.dataset.ideaItem) || allExistingInBucketList.length === 0) {
-        let item = {
-            itemImg: cardSelected.getElementsByClassName('idea-img')[0].src,
-            itemImgDesc: cardSelected.getElementsByClassName('idea-img')[0].alt,
-            itemTitle: cardSelected.getElementsByClassName('card-title')[0].innerHTML,
-            itemId: `bucketList-${cardSelected.dataset.ideaItem}`,
-            itemDataAtt: cardSelected.dataset.ideaItem
-        }
         addToLocalStorage(USER_BUCKET_LIST, item);
         mapAndAppendToBucketList(item);
+        showUserMessageModal(item, false);
     }
     else {
-        //show message to user 
-        console.log("error");
+        showUserMessageModal(item, true);
     }
 }
 
@@ -276,6 +276,26 @@ function updateBucketListItem(newData) {
 
         updateLocalStorageItem(USER_BUCKET_LIST, updatedBucketListItem);
     }
+}
+
+function showUserMessageModal(bucketListItem, isError) {
+    // Initialize message
+    let messageDescription = isError ? ' is already in your bucketlist.' : ' added to your bucketlist.';
+
+    // Selecting modal elements
+    let modalMessageElement = document.getElementById('userMessageModalLabel');
+    let messageItemTitleElement = modalMessageElement.querySelector('.messageItemTitle'); 
+    let messageItemDescriptionElement = modalMessageElement.querySelector('.messageItemDescription');
+
+    // Initialize the Bootstrap modal
+    var messageModal = new bootstrap.Modal(document.getElementById('userMessage'));
+
+    // Set the content of the modal
+    messageItemTitleElement.innerHTML = bucketListItem.itemTitle;
+    messageItemDescriptionElement.innerHTML = messageDescription;
+
+    // Show the modal
+    messageModal.show();
 }
 
 // ------------------- LOCAL STORAGE---------------------//
